@@ -29,7 +29,7 @@ func main() {
 	})
 	m.Get("/todos", TodoIndex)
 	// m.Post("/todos", TodoCreate)
-	// m.Get("/todos/:id", TodoShow)
+	m.Get("/todos/:id", TodoShow)
 	// m.Patch("/todos/:id", TodoUpdate)
 	// m.Delete("/todos/:id", TodoDestroy)
 	

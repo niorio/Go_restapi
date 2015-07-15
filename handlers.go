@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	_ "github.com/lib/pq"
 	"github.com/martini-contrib/render"
+	"github.com/go-martini/martini"
 	// "github.com/martini-contrib/binding"
 )
 
@@ -35,9 +36,19 @@ func TodoIndex(db *sql.DB, r render.Render) {
 //
 // }
 //
-// func TodoShow() {
-//
-// }
+func TodoShow(db *sql.DB, p martini.Params, r render.Render) {
+	row := db.QueryRow("SELECT id, name, completed FROM todos WHERE id = $1", p["id"])
+	
+	var id int
+	var name string
+	var completed bool
+	err := row.Scan(&id, &name, &completed)
+	PanicIf(err)
+	
+	todo := Todo{Id: id, Name: name, Completed: completed}
+	
+	r.JSON(200, todo)
+}
 //
 // func TodoUpdate() {
 //
