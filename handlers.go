@@ -5,7 +5,7 @@ import (
 	_ "github.com/lib/pq"
 	"github.com/martini-contrib/render"
 	"github.com/go-martini/martini"
-	// "github.com/martini-contrib/binding"
+	"net/http"
 )
 
 func TodoIndex(db *sql.DB, r render.Render) {
@@ -32,10 +32,14 @@ func TodoIndex(db *sql.DB, r render.Render) {
 	r.JSON(200, todos)
 }
 
-// func TodoCreate() {
-//
-// }
-//
+func TodoCreate(db *sql.DB, p martini.Params, r render.Render, req *http.Request, todo Todo) {
+	
+	_, err := db.Exec("INSERT INTO todos VALUES ($1, $2, $3)", todo.Id, todo.Name, todo.Completed)
+	PanicIf(err)
+	r.JSON(200, todo)
+
+}
+
 func TodoShow(db *sql.DB, p martini.Params, r render.Render) {
 	row := db.QueryRow("SELECT id, name, completed FROM todos WHERE id = $1", p["id"])
 	

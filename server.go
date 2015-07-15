@@ -5,6 +5,7 @@ import(
 	"database/sql"
 	_ "github.com/lib/pq"
 	"github.com/martini-contrib/render"
+	"github.com/martini-contrib/binding"
 )
 
 func SetupDB() *sql.DB{
@@ -28,7 +29,7 @@ func main() {
 		return "Hello!"
 	})
 	m.Get("/todos", TodoIndex)
-	// m.Post("/todos", TodoCreate)
+	m.Post("/todos", binding.Bind(Todo{}), TodoCreate)
 	m.Get("/todos/:id", TodoShow)
 	// m.Patch("/todos/:id", TodoUpdate)
 	// m.Delete("/todos/:id", TodoDestroy)
