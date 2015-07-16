@@ -34,8 +34,10 @@ func TodoIndex(db *sql.DB, r render.Render) {
 
 func TodoCreate(db *sql.DB, p martini.Params, r render.Render, req *http.Request, todo Todo) {
 	
-	_, err := db.Exec("INSERT INTO todos VALUES ($1, $2, $3)", todo.Id, todo.Name, todo.Completed)
+	var id int
+	err := db.QueryRow("INSERT INTO todos (name, completed) VALUES ($1, $2) RETURNING id", todo.Name, todo.Completed).Scan(&id)
 	PanicIf(err)
+	todo.Id = int(id)
 	r.JSON(200, todo)
 
 }
@@ -55,8 +57,10 @@ func TodoShow(db *sql.DB, p martini.Params, r render.Render) {
 }
 
 func TodoUpdate(db *sql.DB, p martini.Params, r render.Render, req *http.Request, todo Todo) {
-	_, err := db.Exec("UPDATE todos SET name=$1, completed=$2 WHERE id=$3", todo.Name, todo.Completed, p["id"])
+	var id int
+	err := db.QueryRow("UPDATE todos SET name=$1, completed=$2 WHERE id=$3 RETURNING id", todo.Name, todo.Completed, p["id"]).Scan(&id)
 	PanicIf(err)
+	todo.Id = id
 	r.JSON(200,todo)
 }
 
