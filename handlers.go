@@ -59,7 +59,9 @@ func TodoUpdate(db *sql.DB, p martini.Params, r render.Render, req *http.Request
 	PanicIf(err)
 	r.JSON(200,todo)
 }
-//
-// func TodoDestroy() {
-//
-// }
+
+func TodoDestroy(db *sql.DB, p martini.Params, r render.Render) {
+	_, err := db.Exec("DELETE FROM todos WHERE id=$1", p["id"])
+	PanicIf(err)
+	r.JSON(200, map[string]interface{}{"success": true})
+}
