@@ -53,10 +53,12 @@ func TodoShow(db *sql.DB, p martini.Params, r render.Render) {
 	
 	r.JSON(200, todo)
 }
-//
-// func TodoUpdate() {
-//
-// }
+
+func TodoUpdate(db *sql.DB, p martini.Params, r render.Render, req *http.Request, todo Todo) {
+	_, err := db.Exec("UPDATE todos SET name=$1, completed=$2 WHERE id=$3", todo.Name, todo.Completed, p["id"])
+	PanicIf(err)
+	r.JSON(200,todo)
+}
 //
 // func TodoDestroy() {
 //

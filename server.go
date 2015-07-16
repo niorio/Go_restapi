@@ -31,8 +31,9 @@ func main() {
 	m.Get("/todos", TodoIndex)
 	m.Post("/todos", binding.Bind(Todo{}), TodoCreate)
 	m.Get("/todos/:id", TodoShow)
-	// m.Patch("/todos/:id", TodoUpdate)
-	// m.Delete("/todos/:id", TodoDestroy)
+	m.Patch("/todos/:id", binding.Bind(Todo{}), TodoUpdate)
+	m.Put("/todos/:id", binding.Bind(Todo{}), TodoUpdate)
+	m.Delete("/todos/:id", TodoDestroy)
 	
 	m.Run()
 }
